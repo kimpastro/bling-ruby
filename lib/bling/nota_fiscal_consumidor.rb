@@ -6,7 +6,7 @@ require 'httparty'
 module Bling
   class BlingError < StandardError ; end
 
-  class NotaFiscal
+  class NotaFiscalConsumidor
     include HTTParty
 
     base_uri "#{API_URL}"
@@ -65,11 +65,11 @@ module Bling
       #
       # xml - Path para XML
 
-      def salvar_nota_fiscal(attributes = {})
+      def salvar_nota(attributes = {})
         apikey = attributes[:apikey]
         xml    = attributes[:xml]
 
-        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, xml: xml } } )
+        full_data = self.send(:post, '/nfce/json', { query: { apikey: apikey, xml: xml } } )
         get_response(full_data["retorno"])
       end
 
@@ -91,7 +91,7 @@ module Bling
         serie      = attributes[:serie].to_s
         send_email = attributes[:send_email]
 
-        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
+        full_data = self.send(:post, '/nfce/json', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
         get_response(full_data["retorno"])
       end
 

@@ -68,10 +68,9 @@ module Bling
       private
 
       def get_response data
-        raise(BlingError, data["erros"]["erro"]) if data["erros"]
+        raise(BlingError, data["erros"].first["erro"]["msg"]) if data["erros"]
         data["pedidos"]
       end
     end
   end
 end
-
