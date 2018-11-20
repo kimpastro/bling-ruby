@@ -65,6 +65,15 @@ module Bling
         get_response(full_data["retorno"])
       end
 
+      def atualiza(attributes = {})
+        apikey        = attributes[:apikey]
+        numero_pedido = attributes[:numero_pedido]
+        xml           = attributes[:xml]
+
+        full_data = self.send(:put, "/pedido/#{numero_pedido}/json", { query: { apikey: apikey, xml: xml } } )
+        get_response(full_data["retorno"])
+      end
+
       private
 
       def get_response data

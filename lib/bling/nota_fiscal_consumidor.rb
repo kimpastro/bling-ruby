@@ -27,7 +27,7 @@ module Bling
         numero = attributes[:numero].to_s
         serie  = attributes[:serie].to_s
 
-        full_data = self.send(:get, "/notafiscal/#{numero}/#{serie}/json", { query: { apikey: apikey } } )
+        full_data = self.send(:get, "/nfce/#{numero}/#{serie}/json", { query: { apikey: apikey } } )
         get_response(full_data["retorno"])
       end
 
@@ -53,7 +53,7 @@ module Bling
         page        = "/page=#{page_number}" if page_number
         filters     = set_filters(attributes)
 
-        full_data = self.send(:get, "/notasfiscais#{page}/json", { query: { apikey: apikey, filters: filters } } )
+        full_data = self.send(:get, "/nfce#{page}/json", { query: { apikey: apikey, filters: filters } } )
         get_response(full_data["retorno"])
       end
 
@@ -90,15 +90,20 @@ module Bling
         number     = attributes[:number].to_s
         serie      = attributes[:serie].to_s
         send_email = attributes[:send_email]
-
-        full_data = self.send(:post, '/nfce/json', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
-        get_response(full_data["retorno"])
+        
+        full_data = self.send(:post, '/nfce', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
+        get_response_consultar(full_data["retorno"])
       end
 
       private
 
       def get_response data
         raise(BlingError, data["erros"].first["erro"]["msg"]) if data["erros"]
+        data["notasfiscais"]
+      end
+
+      def get_response_consultar data
+        raise(BlingError, data["erros"].first.last["msg"]) if data["erros"]
         data["notasfiscais"]
       end
 
